@@ -1,0 +1,90 @@
+<html>
+  <head>
+    <title>IslamMansourJSTask</title>
+  </head>
+  <body style="margin:0px">
+    <div id="wrap">
+      <canvas id="surface" width="1000" height="500"></canvas>
+      <div style="padding-top: 30px;">
+        <label for="angle">Angle</label>
+        <input name="angle" type="text" id="angle" value="45" placeholder="angle" />
+        <label for="velocity">Velocity</label>
+        <input type="text" name="velocity" id="vel" value="80" placeholder="velocity" />
+        <input type="button" onclick="start()" id="starter" value="Start" />
+        <input type="button" onclick="reset()" id="resetBtn" value="Reset" />
+      </div>
+      <span>
+        <br>  
+        Islam Mansour 
+        <br>
+        +2 0100 034 7735
+        <br>
+        eslam.mansour15@gmail.com
+
+      </span>
+    </div>
+  </body>
+  <script type="text/javascript">
+    var data = {
+      x: 20,
+      y: 485,
+      r: 12,
+      v: 80,
+      angle: 45
+    };
+    var canvas = document.getElementById('surface');
+    var ctx = canvas.getContext('2d');
+    var frameCount = 0;
+    var v0x = data.v * Math.cos(data.angle * Math.PI / 180);
+    var v0y = data.v * Math.sin(data.angle * Math.PI / 180);
+    var startX = data.x;
+    var startY = data.y;
+    var g = 9.8;
+    setInterval(function () {
+      ctx.save();
+      ctx.fillStyle = "grey";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.restore();
+      if (data.y < canvas.height - data.r && data.x < canvas.width - data.r) {
+        data.y = startY - (v0y * frameCount - (1 / 2 * g * Math.pow(frameCount, 2)));
+        data.x = startX + v0x * frameCount;
+        if(data.y > 500)
+          data.y = 500
+      }
+      ctx.save();
+      ctx.beginPath();
+      ctx.fillStyle = "white";
+      ctx.arc(data.x, data.y, data.r, 0, Math.PI * 2, true);
+      ctx.fill();
+      frameCount += 0.3;
+      ctx.beginPath();
+      ctx.moveTo(data.x, data.y);
+      ctx.lineTo(data.x, data.y);
+      ctx.stroke();
+    }, 10);
+
+    function start() {
+      data.x = 20;
+      data.y = 485;
+      data.v = document.getElementById('vel').value;
+      data.angle = document.getElementById('angle').value;
+      frameCount = 0;
+      v0x = data.v * Math.cos(data.angle * Math.PI / 180);
+      v0y = data.v * Math.sin(data.angle * Math.PI / 180);
+      document.getElementById('resetBtn').disabled = false;
+    }
+
+    function reset() {
+      data.x = 20;
+      data.y = 485;
+      v0x = 0;
+      v0y = 0;
+      document.getElementById('resetBtn').disabled = true;
+    }
+
+    document.body.onkeyup = function(e){
+      //press spave to restart it
+      e.keyCode == 32 && start();
+    }
+  </script>
+</html>
